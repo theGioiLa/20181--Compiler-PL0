@@ -1,0 +1,8 @@
+program id;
+const a = 3, b = 4;
+var x, y;
+procedure t(x; y; var n);
+    begin end;
+begin
+    call t(a, x, 3); 
+END.

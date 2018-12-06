@@ -1,0 +1,51 @@
+PROGRAM thang;
+const n = 1;
+var x, y, z, r, f, q; 
+
+PROCEDURE gcd;
+VAR f, g;
+BEGIN
+  f := x;
+  g := y;
+  WHILE f <> g DO
+  BEGIN
+    IF f < g THEN g := g - f;
+    IF g < f THEN f := f - g
+  END;
+  z := f
+END;
+
+PROCEDURE div;
+VAR f, g;
+BEGIN
+  f := x;
+  g := y;
+  WHILE f <> g DO
+  BEGIN
+    IF f < g THEN g := g - f;
+    IF g < f THEN f := f - g
+  END;
+  z := f
+END;
+
+PROCEDURE fact;
+BEGIN
+  IF n > 1 THEN
+  BEGIN
+    f := n * f;
+    CALL fact;
+  END;;
+END;
+
+PROCEDURE fct;
+const m = 1;
+BEGIN
+  IF n > 1 THEN
+  BEGIN
+    f := n * f;
+    CALL fact
+  END
+END;
+
+Begin
+End.

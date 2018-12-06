@@ -1,0 +1,15 @@
+Program example12z;
+
+const x = 10;
+Var a, b, c, d[3];
+
+Procedure gcd(a; var d);
+	Begin 
+		While a<>b do 
+			if a = b then a := a - b
+			else b := b-a;
+		d := b;
+	End;
+Begin
+	Call gcd(a, b);
+End.
