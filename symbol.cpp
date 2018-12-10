@@ -3,10 +3,13 @@
 void sym_table::add_sym(symbol s) {
     if (s.type == PARA_INT| s.type == VAR_REF) {
         parameter_sym.push_back(s);
+        /* TODO
+         * Can xem xet cac o nho de luu tham so
+         */
     } else {
         declared_sym.push_back(s);
 
-        if (s.type == CONST_INT | s.type == VAR_INT) size += sizeof(int);
+        if (s.type == VAR_INT) size += sizeof(int);
         if (s.type == VAR_ARRAY) {
             size += sizeof(int) * s.size_of_array;
         }
@@ -27,28 +30,26 @@ bool sym_table::is_declared(const symbol s) {
 
 symbol* sym_table::find(const std::string ident) {
     sym_table *current = this;
-    symbol *result = nullptr;
     while (current) {
         for (size_t i = 0; i < current->parameter_sym.size(); i++) {
             if (current->parameter_sym[i].name == ident) {
-                result = &(current->parameter_sym[i]);
+                return &(current->parameter_sym[i]);
                 break;
             }
         }
 
         // if not found symbol in parameter, find it in declared list instead
-        for (size_t i = 0; !result && i < current->declared_sym.size(); i++) {
+        for (size_t i = 0; i < current->declared_sym.size(); i++) {
             if (current->declared_sym[i].name == ident) {
-                result = &(current->declared_sym[i]);
+                return &(current->declared_sym[i]);
                 break;
             }
         }
 
-        if (!result) current = current->parent;
-        else break;
+        current = current->parent;
     }
 
-    return result;
+    return NULL;
 }
 
 bool sym_table::check_para(Category cate, int index)  {

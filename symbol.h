@@ -25,9 +25,9 @@ struct symbol {
 
     Type type;
     Category category = LVALUE;
-    sym_table *next = nullptr;
+    sym_table *next = NULL;
 
-    void clear() {name.clear(); value = -1; type = DEFAULT; next = nullptr; category = LVALUE;}
+    void clear() {name.clear(); value = -1; type = DEFAULT; next = NULL; category = LVALUE;}
 };
 
 // define symbol table of a procedure
@@ -35,7 +35,7 @@ struct sym_table{
     std::vector<symbol> declared_sym;
     std::vector<symbol> parameter_sym;
     int size = 0;
-    sym_table *parent = nullptr;
+    sym_table *parent = NULL;
 
     // Them 1 symbol vao bang ki hieu
     void add_sym(symbol s);

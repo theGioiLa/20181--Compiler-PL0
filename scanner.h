@@ -8,7 +8,7 @@
 struct Scanner {
     char current_char;
 	unsigned curr_line;
-    char *buffer = nullptr;
+    char *buffer = NULL;
     int curr_cursor = 0;
 
 
@@ -38,7 +38,7 @@ struct Scanner {
     ~Scanner() {
         if (buffer) {
             delete[] buffer;
-            buffer = nullptr;
+            buffer = NULL;
         }
     }
 

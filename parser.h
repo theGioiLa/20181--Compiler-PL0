@@ -7,11 +7,11 @@ struct Parser {
     // Lexema module
 	Token previous_token;
 	Token curr_token;
-	Scanner* scanner = nullptr;
+	Scanner* scanner = NULL;
 
     // Sematic module
     sym_table *tx;
-    sym_table *called_table = nullptr; // bang ky hieu dang duoc goi trong cau lenh CALL
+    sym_table *called_table = NULL; // bang ky hieu dang duoc goi trong cau lenh CALL
     symbol *curr_sym = new symbol;
     int nParameters = 0;
     Category category;
@@ -25,7 +25,7 @@ struct Parser {
 	~Parser() {
 		if (scanner) {
 			delete scanner;
-			scanner = nullptr;
+			scanner = NULL;
 		}
 	}
 

@@ -37,14 +37,9 @@ BEGIN
   END;;
 END;
 
-PROCEDURE fct;
+PROCEDURE quy;
 const m = 1;
 BEGIN
-  IF n > 1 THEN
-  BEGIN
-    f := n * f;
-    CALL fact
-  END
 END;
 
 Begin

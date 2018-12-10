@@ -1,6 +1,6 @@
 program thang;
 const max = 100,min = 1;
-var arg,ret;
+var arg,ret, d[1], e[5];
 
 procedure isprime;
 var i;
@@ -14,7 +14,10 @@ begin
 			ret := 0;
 			i := arg
 		end;
-		i := i + 1
+		i := i + 1;
+        arg := d[1] + d[1] + d[1] + max;
+        max := 10;
+        d[1] := e[2];
 	end
 end;
 

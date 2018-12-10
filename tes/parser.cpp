@@ -24,7 +24,7 @@ Category Parser::factor() {
                 cate = LVALUE;
             } else if (curr_sym->type == VAR_ARRAY) {
 				nextToken();
-				error(10); // Thieu chi so cua mang
+				error(10, "abc"); // Thieu chi so cua mang
 			}
 
         } else error(4, curr_token.name); // code 4: Bien/Hang chua duoc khai bao
@@ -77,8 +77,10 @@ Category Parser::expression() {
 	}
 
 
-    if (isLvalue) return LVALUE;
-    else return RVALUE;
+    if (isLvalue) cate = LVALUE;
+    else cate = RVALUE;
+
+    return cate;
 }
 
 void Parser::condition() {
@@ -119,9 +121,9 @@ void Parser::statement() {
 										return;
 									}
 									else error("Thieu ';' sau" + previous_token);
-								} error(10); // Thieu chi so cua mang o ve trai
+								} error(10, curr_sym->name); // Thieu chi so cua mang o ve trai
 							} else error(4, curr_token.name);
-						} error(10); 
+						} error(10, "Ident"); 
 					} else error("Su dung ':=' thay vi" + curr_token);
 				}
 			}
@@ -237,18 +239,19 @@ void Parser::block() {
 	while (curr_token == PROCEDURE) {
 		nextToken();
 		if (curr_token == Ident) {
+			curr_sym = new symbol;
+            curr_sym->name = curr_token.name;
+            curr_sym->type = PROC;
+            curr_sym->next = mktable(tx, curr_sym->name);
 			
             // them procedure vao scope hien tai: kiem tra su ton tai cua dinh danh tu scope hien tai cho toi global scope
-            if (!tx->find(curr_token.name)) {
-                curr_sym = new symbol;
-                curr_sym->name = curr_token.name;
-                curr_sym->type = PROC;
-                curr_sym->next = mktable(tx, curr_sym->name);
-                tx->add_sym((*curr_sym));
-                // bat dau vao scope cua procedure vua duoc them
-                tx = curr_sym->next;
-            } else error(2, curr_sym->name);
+            if (!tx->find(curr_sym->name)) tx->add_sym((*curr_sym));
+            else error(2, curr_sym->name);
 			
+
+            // bat dau vao scope cua procedure vua duoc them
+            tx = curr_sym->next;
+
             nextToken();
             if (curr_token == LParent) {
                 // Them cac tham bien vao sym_table cua procedure hien tai
@@ -307,7 +310,7 @@ void Parser::block() {
 }
 
 void Parser::program() {
-    tx = mktable(NULL, "global");
+    tx = mktable(nullptr, "global");
 	if (curr_token == PROGRAM) {
 		nextToken();
 		if (curr_token == Ident) {
@@ -444,7 +447,7 @@ void Parser::error(const int code, std::string msg) const {
             break;
     };
 
-    std::cerr << '\n';
+    std::cout << '\n';
 
     exit(EXIT_FAILURE);
 }

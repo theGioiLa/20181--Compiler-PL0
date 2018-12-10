@@ -13,6 +13,11 @@ int main(int argc, char** argv) {
         std::cin >> source;
     }
 
+    /*
+    Scanner s(source);
+    while (s.current_char != '\0') s.getToken().show();
+    return 0;
+    */
     Parser parser(source);
     parser.program();
     std::cout << "Phan tich hoan tat!\n";
