@@ -30,7 +30,7 @@ struct Parser {
 	}
 
 	void nextToken();
-	void error(const char* msg) const;    // throw error
+	void error(const std::string msg) const;    // throw error
     void error(const int code, std::string msg = "") const; 
 	Category factor();			
 	Category term();

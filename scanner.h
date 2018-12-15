@@ -2,7 +2,8 @@
 #define SCANNER_H
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cctype>
+#include <cstdlib>
 #include "Token.h"
 
 struct Scanner {
@@ -42,7 +43,7 @@ struct Scanner {
         }
     }
 
-	void error(const char*);
+	void error(const char*, bool overflow = false);
     char getCh();
     bool check_keyword(Token& token) const;
     char nextCh() {return buffer[curr_cursor++]; }

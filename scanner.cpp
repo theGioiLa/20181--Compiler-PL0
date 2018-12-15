@@ -13,8 +13,11 @@ Token_Type kw[] = {
 };
 
 
-void Scanner::error(const char* msg) {
-	std::cerr << "[ERROR] Loi token tai dong " << curr_line << ": " << msg << std::endl;
+void Scanner::error(const char* msg, bool  overflow) {
+    if (overflow)
+        std::cout << "[ERROR] Loi token tai dong " << curr_line << ": " << msg << ' ' << MAX_LENGTH_NUMBER << std::endl;
+    else 
+        std::cout << "[ERROR] Loi token tai dong " << curr_line << ": " << msg << std::endl;
 	exit(1);
 }
 
@@ -199,7 +202,7 @@ Token Scanner::getToken() {
 			if (length < MAX_LENGTH_NUMBER) {
 				token.name.push_back(current_char);
 				length++;
-			} else error("Overflow number, limited to 9 digit");
+			} else error("Do dai toi da cua mot so la", true);
             getCh();
         }
 
@@ -212,7 +215,7 @@ Token Scanner::getToken() {
 		int length = 0;
         while (std::isalpha(current_char)) {
 			if (length < MAX_LENGTH_IDENT) {
-                token.name += toupper(current_char);
+                token.name += std::toupper(current_char);
 				length++;
 			}
 			
@@ -223,9 +226,9 @@ Token Scanner::getToken() {
         if (std::isdigit(current_char)) {
             while (std::isdigit(current_char) || std::isalpha(current_char)) {
 				if (length < MAX_LENGTH_IDENT) {
-                    token.name += toupper(current_char);
+                    token.name += std::toupper(current_char);
 					length++;
-				} else error("Overflow identifier, limited to 10");
+				} else error("Do dai toi da cua mot ident la", true);
 				
                 getCh();
             }

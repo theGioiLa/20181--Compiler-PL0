@@ -2,7 +2,7 @@ program thang;
 const max = 100,min = 1;
 var arg,ret, d[1], e[5];
 
-procedure isprime;
+procedure isprime(var x; y);
 var i;
 begin
 	ret := 1;
@@ -16,20 +16,20 @@ begin
 		end;
 		i := i + 1;
         arg := d[1] + d[1] + d[1] + max;
-        max := 10;
-        d[1] := e[2];
+        d[1] := e[2] + arg;
 	end
 end;
 
-procedure primes;
+procedure primes(var x);
 begin
 	arg := 2;
 	while arg < max do
 	begin
-		call isprime;
+    call isprime(e[4], 2);
 		arg := arg + 1
 	end
 end;
 Begin
-
+    Call primes(d[1]);
+    call isprime(e[4], 2);
 End.

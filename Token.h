@@ -35,7 +35,6 @@ enum Token_Type {
 struct Token {
     Token_Type type;
     std::string name;
-    //std::vector<char> name;
 
     Token(Token_Type _type, std::string str) {
         type = _type;
@@ -51,13 +50,11 @@ struct Token {
 	}
 	
     int get_num() {
-        return std::atoi(name.c_str());
+        return std::stoi(name);
     }
 
-	friend const char* operator + (const char* str, const Token& token) {
-		static char result[100];
-		sprintf(result, "%s \'%s\' token", str, token.name.c_str());
-		return result;
+	friend std::string operator + (std::string str, const Token& token) {
+        return str + " '" + token.name + "' token";
 	}
 
     void show() {

@@ -17,15 +17,13 @@ Category Parser::factor() {
 
             nextToken();
             if (curr_token == LBracket) {
+                if (curr_sym->type != VAR_ARRAY) error(11, curr_sym->name); // symbol hien tai khong phai la kieu mang 
                 nextToken();
                 expression();
                 if (curr_token == RBracket) nextToken();
                 else error("Thieu ']' sau" + previous_token);
                 cate = LVALUE;
-            } else if (curr_sym->type == VAR_ARRAY) {
-				nextToken();
-				error(10); // Thieu chi so cua mang
-			}
+            } else if (curr_sym->type == VAR_ARRAY) error(10, curr_sym->name); // Thieu chi so cua mang
 
         } else error(4, curr_token.name); // code 4: Bien/Hang chua duoc khai bao
 	}
@@ -103,28 +101,10 @@ void Parser::statement() {
             if (curr_token == LBracket) {
                 nextToken();
                 expression();
+                if (curr_sym->type != VAR_ARRAY) error(11, curr_sym->name); // symbol hien tai khong phai la kieu mang 
                 if (curr_token == RBracket) nextToken();
                 else error("Thieu ']' sau" + previous_token);
-            } else { // kiem tra truong hop a := b voi a va b deu la mang
-				if (curr_sym->type == VAR_ARRAY) {
-					if (curr_token == Assign) {
-						nextToken();
-						if (curr_token == Ident) {
-							curr_sym = tx->find(curr_token.name);
-							if (curr_sym) {
-								if (curr_sym->type == VAR_ARRAY) {
-									nextToken();
-									if (curr_token == END || curr_token == Semicolon) {
-										nextToken();
-										return;
-									}
-									else error("Thieu ';' sau" + previous_token);
-								} error(10); // Thieu chi so cua mang o ve trai
-							} else error(4, curr_token.name);
-						} error(10); 
-					} else error("Su dung ':=' thay vi" + curr_token);
-				}
-			}
+            } else if (curr_sym->type == VAR_ARRAY) error(10); // Thieu chi so cua mang
             
             if (curr_token == Assign) {
                 if (curr_sym->type == CONST_INT) error(5, curr_sym->name); // code 5: Day la hang so
@@ -136,6 +116,7 @@ void Parser::statement() {
 	else if (curr_token == CALL) {
 		nextToken();
 		if (curr_token == Ident) {
+            // processIO();
             // kiem tra dinh danh
             curr_sym = tx->find(curr_token.name);
             if (curr_sym && curr_sym->type == PROC) {
@@ -267,7 +248,7 @@ void Parser::block() {
                         else error(3); // Dinh danh cua tham bien da ton tai
 
                         nextToken();
-                    } else error("Su dung ')' thay vi" + previous_token);
+                    } else error("Thieu tham so sau" + previous_token);
                 } while (curr_token == Semicolon);
 
                 if (curr_token == RParent) nextToken();
@@ -303,7 +284,8 @@ void Parser::block() {
 		}
 		else if (curr_token == Dot) error("Can su dung tu khoa 'END' truoc" + curr_token);
 		else error("Su dung tu khoa 'END' thay vi" + curr_token);
-	} else error("Khong xac dinh duoc block bat dau voi" + curr_token);
+	} else if (curr_token.name.empty()) error("Thieu than chuong trinh");
+    else error("Khong xac dinh duoc block bat dau voi" + curr_token);
 }
 
 void Parser::program() {
@@ -390,61 +372,65 @@ sym_table* Parser::mktable(sym_table *parent, std::string name) {
 }
 // Debug
 
-void Parser::error(const char* msg) const {
+void Parser::error(const std::string msg) const {
     int line = scanner->curr_line;
     if (curr_token == Eof) line--;
-    std::cerr << "\n=======================================================\n";
-	std::cerr << "[ERROR] Loi cu phap tai dong " << line << ": " << msg << '\n';
+    std::cout << "\n=======================================================\n";
+	std::cout << "[ERROR] Loi cu phap tai dong " << line << ": " << msg << '\n';
 	exit(2);
 }
 
 // Sematic error
 void Parser::error(const int code, std::string msg) const {
-    std::cerr << "\n=======================================================\n";
-    std::cerr << "[ERROR] Dong " << scanner->curr_line << ": ";
+    std::cout << "\n=======================================================\n";
+    std::cout << "[ERROR] Dong " << scanner->curr_line << ": ";
     switch(code) {
         case 1: 
-            std::cerr << "Khong the dinh nghia lai bien '" + msg + "' trong scope hien tai";
+            std::cout << "Khong the dinh nghia lai bien '" + msg + "' trong scope hien tai";
             break;
 
         case 2: 
-            std::cerr << "Ten thu tuc " + msg + " trung voi ten bien/hang/thu tuc da khai bao";
+            std::cout << "Ten thu tuc " + msg + " trung voi ten bien/hang/thu tuc da khai bao";
             break;
 
         case 3: 
-            std::cerr << "Dinh danh cua tham bien da ton tai";
+            std::cout << "Dinh danh cua tham bien da ton tai";
             break;
 
         case 4: 
-            std::cerr << "Bien/Hang " + msg + " chua duoc khai bao";
+            std::cout << "Bien/Hang " + msg + " chua duoc khai bao";
             break;
 
         case 5: 
-            std::cerr << "Khong the thay doi gia tri cua hang so " + msg;
+            std::cout << "Khong the thay doi gia tri cua hang so " + msg;
             break;
 
         case 6: 
-            std::cerr << "Khong khop voi khai bao cua thu tuc " + msg + " (Tham so thu " << nParameters << " la phai la mot bien hoac mot phan tu cua mang)";
+            std::cout << "Khong khop voi khai bao cua thu tuc " + msg + " (Tham so thu " << nParameters << " la phai la mot bien hoac mot phan tu cua mang)";
             break;
 
         case 7: 
-            std::cerr << "Khong khop voi khai bao cua thu tuc " + msg + " (Thua tham so)";
+            std::cout << "Khong khop voi khai bao cua thu tuc " + msg + " (Thua tham so)";
             break;
 
         case 8: 
-            std::cerr << "Khong khop voi khai bao cua thu tuc " + msg + " (Thieu tham so)";
+            std::cout << "Khong khop voi khai bao cua thu tuc " + msg + " (Thieu tham so)";
             break;
 
         case 9: 
-            std::cerr << "Khong ton tai thu tuc " + msg; 
+            std::cout << "Khong ton tai thu tuc " + msg; 
             break;
 			
         case 10: 
-            std::cerr << "Thieu chi so cua mang" + msg;
+            std::cout << "Thieu chi so cua mang " + msg;
+            break;
+
+        case 11: 
+            std::cout << msg + " khong phai la kieu mang";
             break;
     };
 
-    std::cerr << '\n';
+    std::cout << '\n';
 
     exit(EXIT_FAILURE);
 }

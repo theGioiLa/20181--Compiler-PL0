@@ -3,9 +3,6 @@
 void sym_table::add_sym(symbol s) {
     if (s.type == PARA_INT| s.type == VAR_REF) {
         parameter_sym.push_back(s);
-        /* TODO
-         * Can xem xet cac o nho de luu tham so
-         */
     } else {
         declared_sym.push_back(s);
 
