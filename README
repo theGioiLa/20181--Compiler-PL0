@@ -1,0 +1,6 @@
+Compile:
+	g++ *.cpp -o main
+OR 	g++ -std=c++11 *.cpp -o main
+
+Run:
+	.\main.exe path_to_source_file
