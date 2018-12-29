@@ -1,6 +1,7 @@
 #ifndef SYMBOL_H
 #define SYMBOL_H
 #include "Token.h"
+#define INT_SIZE_MC 2
 
 enum Type {
     DEFAULT = -1, 
@@ -23,25 +24,29 @@ struct symbol {
         int size_of_array;
     };
 
-    Type type;
-    Category category = LVALUE;
-    sym_table *next = NULL;
+    Type type = DEFAULT;
+    Category category = RVALUE;
+    
+    int offset = -1;
+    int level = -1;
 
-    void clear() {name.clear(); value = -1; type = DEFAULT; next = NULL; category = LVALUE;}
+    sym_table *next = NULL;         // Sd doi voi PROCE
 };
 
 // define symbol table of a procedure
-struct sym_table{
-    std::vector<symbol> declared_sym;
-    std::vector<symbol> parameter_sym;
-    int size = 0;
+struct sym_table {
+    std::vector<symbol*> declared_sym;
+    std::vector<symbol*> parameter_sym;
+    int memory_size = 0;
+    int level = 0;
+    int begin_addr = -1;
     sym_table *parent = NULL;
 
     // Them 1 symbol vao bang ki hieu
-    void add_sym(symbol s);
+    void add_sym(symbol *s);
 
     // Kiem tra khai bao cua symbol trong scope hien tai
-    bool is_declared(const symbol s);
+    bool is_declared(const symbol *s);
 
     // Tim symbol tu scope hien tai cho toi het global scope
     symbol* find(const std::string ident);
@@ -50,11 +55,8 @@ struct sym_table{
     bool check_para(Category cate, int index);
 
     // just for debug
-    std::string name;
-    int id;
-    sym_table(int _id) {id = _id;}
+    sym_table(int _level) {level = _level;}
     sym_table() {}
-    sym_table(std::string _name) {name = _name;}
 };
 
 #endif

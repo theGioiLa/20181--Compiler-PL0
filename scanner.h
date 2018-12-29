@@ -1,9 +1,6 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
-#include <cstdio>
-#include <cctype>
-#include <cstdlib>
 #include "Token.h"
 
 struct Scanner {
@@ -36,14 +33,7 @@ struct Scanner {
         std::cout << ' ' << curr_line <<  ": ";
     }
 
-    ~Scanner() {
-        if (buffer) {
-            delete[] buffer;
-            buffer = NULL;
-        }
-    }
-
-	void error(const char*, bool overflow = false);
+	void error(const char*);
     char getCh();
     bool check_keyword(Token& token) const;
     char nextCh() {return buffer[curr_cursor++]; }

@@ -2,6 +2,7 @@
 #define PARSER_H
 #include "scanner.h"
 #include "symbol.h"
+#include "opcode.h"
 
 struct Parser {
     // Lexema module
@@ -16,19 +17,13 @@ struct Parser {
     int nParameters = 0;
     Category category;
 
+
 	
-	Parser(std::string src) {
+	Parser(const std::string src) {
 		if (!scanner) scanner = new Scanner(src);
 		curr_token = scanner->getToken();
 	}
 	
-	~Parser() {
-		if (scanner) {
-			delete scanner;
-			scanner = NULL;
-		}
-	}
-
 	void nextToken();
 	void error(const std::string msg) const;    // throw error
     void error(const int code, std::string msg = "") const; 
@@ -46,7 +41,7 @@ struct Parser {
 
     // sematic actions
     sym_table *mktable(sym_table* parent);
-    sym_table *mktable(sym_table* parent, std::string name);
+    sym_table *mktable(sym_table* parent, int curr_level);
 };
 
 #endif
