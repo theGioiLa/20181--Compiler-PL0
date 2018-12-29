@@ -1,0 +1,26 @@
+program test;
+const x = 10;
+var u, t[2];
+
+procedure add(var m; n);
+    const x = 9;
+    var y;
+
+    begin   
+        if m <> 2 then m := n*2;
+        u := x + t[1];
+    end;
+
+procedure mul(a; var b);
+    var y, z;
+    begin 
+        call add(z, 1);
+        call mul(1, y);
+        for y := 0 to a do 
+            y := y + b;
+    end; 
+
+begin
+    call add(u, t[1]);
+end.
+
