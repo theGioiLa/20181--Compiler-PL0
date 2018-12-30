@@ -216,13 +216,13 @@ void Parser::statement() {
 	else if (curr_token == CALL) {
 		nextToken();
 
-        gen_INT_code(FRAME_REGISTER_NUM);
 		if (curr_token == Ident) {
-            // processIO();
             // kiem tra dinh danh
             curr_sym = tx->find(curr_token.name);
             if (curr_sym && curr_sym->type == PROC) {
                 nextToken();
+
+                if (curr_sym->name != "READ" && curr_sym->name != "WRITE" && curr_sym->name != "WRITELN") gen_INT_code(FRAME_REGISTER_NUM);
 
                 symbol* restored_sym = curr_sym;
 
@@ -234,6 +234,9 @@ void Parser::statement() {
                         // kiem tra tham so
                         nextToken();
                         category = expression();
+
+                        curr_sym = restored_sym;
+
                         nParameters++;
                         if (nParameters <= called_table->get_nPara()) {
                             if (!called_table->check_para(category, nParameters-1)) error(6, curr_sym->name); // Truyen sai kieu tham so      
@@ -245,11 +248,18 @@ void Parser::statement() {
                     else error("Thieu ')' sau" + previous_token);
                 }
 
-                curr_sym = restored_sym;
 
-                if (nParameters < called_table->get_nPara()) error(8, curr_sym->name); // Thieu tham so                }
-                 gen_DCT_code(FRAME_REGISTER_NUM + nParameters);
-                 gen_CALL_code(tx->level - called_table->level + 1, called_table->begin_addr);
+                if (nParameters < called_table->get_nPara()) error(8, curr_sym->name); // Thieu tham so     
+
+                if (curr_sym->name == "READ") gen_RI_code();
+                else if (curr_sym->name == "WRITE") gen_WRI_code();
+                else if (curr_sym->name == "WRITELN") {
+                    gen_WRI_code();
+                    gen_WLN_code();
+                } else {
+                    gen_DCT_code(FRAME_REGISTER_NUM + nParameters);
+                    gen_CALL_code(tx->level - called_table->level + 1, called_table->begin_addr);
+                }
 
             } else error(9, curr_token.name); // code 9: Thu tuc chua khai bao
 		} else error("Thieu dinh danh ham sau" + previous_token);

@@ -31,6 +31,12 @@ struct symbol {
     int level = -1;
 
     sym_table *next = NULL;         // Sd doi voi PROCE
+    symbol() {}
+    symbol(std::string _name, Type _type, sym_table *_next = NULL) {
+        name = _name;
+        type = _type;
+        if (_next) next = _next;
+    }
 };
 
 // define symbol table of a procedure
@@ -54,9 +60,15 @@ struct sym_table {
     int get_nPara() {return (int)parameter_sym.size();}
     bool check_para(Category cate, int index);
 
+    bool check_IO(std::string ident) const;
+
     // just for debug
     sym_table(int _level) {level = _level;}
     sym_table() {}
+    sym_table(symbol *n) {
+        parameter_sym.push_back(n);
+        memory_size += INT_SIZE_MC;
+    }
 };
 
 #endif

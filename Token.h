@@ -20,7 +20,6 @@ enum Token_Type {
     // ------------------Keywords----------------------------
     BEGIN, END, IF, THEN, WHILE, DO, CALL, ODD, TO,
     CONST, VAR, PROCEDURE, PROGRAM, ELSE, FOR, 
-    // WRITE, WRITELN, READ, READLN,
 
     // ------------------Operators---------------------------
     Plus, Minus, Mul, Slash, Percent, 					// + - * / %
@@ -36,7 +35,6 @@ enum Token_Type {
 struct Token {
     Token_Type type;
     std::string name;
-    //std::vector<char> name;
 
     Token(Token_Type _type, std::string str) {
         type = _type;
@@ -84,19 +82,13 @@ struct Token {
 			case ELSE: type_str = "ELSE"; break;
 			case FOR: type_str = "FOR"; break;
 			
-			/*
-			case WRITE: type_str = "WRITE"; break;
-			case WRITELN: type_str = "WRITELN"; break;
-			case READ: type_str = "READ"; break;
-			case READLN: type_str = "READLN"; break;
-			*/
-
 			case Plus: type_str = "Plus"; break;
 			case Percent: type_str = "Percent"; break;
 			case Mul: type_str = "Mul"; break;
 			case Slash: type_str = "Slash"; break;
 			case Minus: type_str = "Minus"; break;
 			case Assign: type_str = "Assign"; break;
+
 			case Eq: type_str = "Eq"; break;
 			case Ne: type_str = "Ne"; break;
 			case Lt: type_str = "Lt"; break;

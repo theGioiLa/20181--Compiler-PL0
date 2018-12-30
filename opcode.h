@@ -107,18 +107,23 @@ struct Instruction {
                 break;
 
             case OP_RC:
+                std::cout << "RC\n";
                 break;
 
             case OP_RI:
+                std::cout << "RI\n";
                 break;
 
             case OP_WRC:
+                std::cout << "WRC\n";
                 break;
 
             case OP_WRI:
+                std::cout << "WRI\n";
                 break;
 
             case OP_WLN:
+                std::cout << "WLN\n";
                 break;
 
             case OP_ADD:

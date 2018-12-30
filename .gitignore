@@ -1,6 +1,5 @@
 # Don't track content of these file
 *.zip
-README
 out
 main
 Qi

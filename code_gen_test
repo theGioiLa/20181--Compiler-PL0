@@ -9,6 +9,7 @@ procedure add(var m; n);
     begin   
         if m <> 2 then m := n*2;
         u := x + t[1];
+        call read(t[u]);
     end;
 
 procedure mul(a; var b);
@@ -22,5 +23,7 @@ procedure mul(a; var b);
 
 begin
     call add(u, t[1]);
+    call write(x);
+    call writeln(t[1]);
 end.
 
